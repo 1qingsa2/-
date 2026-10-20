@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的代码</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #58a6ff; margin-bottom: 24px; font-size: 28px; }
+        .file-name {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-bottom: none;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #8b949e;
+            font-size: 14px;
+        }
+        pre {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 我的代码仓库</h1>
+        <div class="file-name">baidu.md</div>
+        <pre><code>
+def save_csv(pairs, path='fanyi.csv'):
+    with open(path, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.writer(f)
+        w.writerow(['原文', '译文'])
+        w.writerows(pairs)
+    print(f'已写入 {path}')
+
+fx = input('请输入')
+
+if __name__ == '__main__':
+    words = [f'{fx}']
+    with BaiduFanyi(headless=False) as fanyi:
+        for src, dst in fanyi.translate_batch(words):
+            print(f'{src}  ->  {dst}')
+        </code></pre>
+    </div>
+</body>
+</html>
