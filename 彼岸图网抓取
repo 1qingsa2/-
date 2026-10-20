@@ -1,0 +1,49 @@
+import os.path
+import time
+from  urllib.request import urlopen
+import openpyxl
+from  lxml import etree
+import requests
+import  fake_useragent
+from retrying import retry
+import json
+from bs4 import BeautifulSoup
+import re
+import jsonpath
+from openpyxl import Workbook
+import  csv
+import pymongo      #操纵数据库。
+import  asyncio
+from aiohttp import ClientSession
+import subprocess
+from email.utils import parsedate_to_datetime
+from email.utils import parsedate_to_datetime
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36",
+    "Referer": "https://pic.netbian.com/"
+}
+
+def req():
+    os.path.exists('./imgs') or os.mkdir('./imgs')
+    c = 0
+    # 修正分页.
+    page_list = ["https://pic.netbian.com/4k/index.html"] + [f"https://pic.netbian.com/4k/index_{i}.html" for i in range(2,5)]
+    for url in page_list:
+        time.sleep(1)
+        r = requests.get(url, headers=headers)
+        tree = etree.HTML(r.content.decode('gbk', errors='ignore'))
+        # li[not(@class)]
+        li = tree.xpath('//*[@id="main"]/div[3]/ul/li[not(@class)]')
+        for i in li:
+            src = i.xpath('./a/img/@src')
+            if src:
+                try:
+                    pic = requests.get("https://pic.netbian.com"+src[0], headers=headers, timeout=10)
+                    if len(pic.content) > 1024:
+                        open(f'./imgs/img_{c}.jpg','wb').write(pic.content)
+                        print(f"下载 img_{c}.jpg")
+                        c += 1
+                    time.sleep(0.3)
+                except Exception as e:
+                    print(f"跳过一张，错误:{e}")
+req()
